@@ -12,7 +12,7 @@ class Linter
 
   def lint(text)
     # Loop over each character in our code
-    text.each_char_with_index do |char, index|
+    text.each_char.with_index do |char, index|
 
       # If the character is an opening brace, push it onto the stack
       if opening_brace?(char)
@@ -49,7 +49,7 @@ class Linter
 
   # Get the opening brace value for a given brace character
   def opening_brace_of(char)
-    { ")" => "(", "}", => "{", "]", => "[" }[char]
+    { ")" => "(", "}" => "{", "]" => "[" }[char]
   end
 
   # Get the last value of the stack
@@ -63,3 +63,9 @@ class Linter
     opening_brace_of(char) == most_recent_opening_brace
   end
 end
+
+good_string = "def some_method(some_argument)"
+bad_string = "def some_method(some_argument, no closing paren"
+
+good_lint = Linter.new.lint(good_string)
+bad_lint = Linter.new.lint(bad_string)
